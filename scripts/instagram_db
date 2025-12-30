@@ -1,1 +1,102 @@
+*/
+
+========================================================
+Create Database and tables 
+========================================================
+Script Purpose:
+  Designed and implemented a comprehensive Instagram database schema featuring core tables: users, photos, comments, tags, likes, followers,   and photo_tag. Established relational integrity through foreign key constraints linking user interactions, photo metadata, and tagging       systems.
+
+Note:
+  Before creating the tables please visit the diagram that will give you a brief idea about the structure of each table and how these tables   are connected with each other using reference key functionality.
+
+*/
+
+- - Now first we will create a Database name - instagram1
+
+create database instagram1;
+
+- - Using created database instagram1 as a current database
+
+ use instagram1;
+ 
+- - Create table users
+ 
+ create table users
+	(
+		id int auto_increment primary key,
+        username varchar(255) unique not null,
+        created_at timestamp default now()
+	);
+    
+- - Create table photos
+
+create table photos
+	(
+		id int auto_increment primary key,
+        image_url varchar(255) unique not null,
+        user_id int not null,
+        created_at timestamp default now(),
+        foreign key (user_id) references users(id)
+	);
+    
+- - Create table comments
+
+create table comments
+	(
+		id int auto_increment primary key,
+        comment_text varchar(255) not null,
+        user_id int not null,
+        photo_id int not null,
+        created_at timestamp default now(),
+        foreign key (user_id) references users(id),
+        foreign key (photo_id) references photos(id)
+	);
+    
+- - Create table likes
+
+create table likes
+	(
+		user_id int not null,
+        photo_id int not null,
+        created_at timestamp default now(),
+        foreign key (user_id) references users(id),
+        foreign key (photo_id) references photos(id),
+        primary key (user_id, photo_id)
+	);
+    
+- - Create table followers
+
+create table followers
+	(
+		follower_id int not null,
+        followee_id int not null,
+        created_at timestamp default now(),
+        foreign key (follower_id) references users(id),
+        foreign key (followee_id) references users(id),
+        primary key (follower_id, followee_id)
+	);
+    
+- - Create table tags
+
+create table tags
+	(
+		id int auto_increment primary key,
+        tag_name varchar(255) unique not null,
+        created_at timestamp default now()
+	);
+    
+- - Create table photo_tags
+
+create table photo_tags
+	(
+		photo_id int not null,
+        tag_id int not null,
+        foreign key (photo_id) references photos(id),
+        foreign key (tag_id) references tags(id),
+        primary key (photo_id, tag_id)
+	);
+    
+    
+
+
 
