@@ -1,6 +1,6 @@
 
 =============================================================================================================
-Solution #1
+Query #1
 =============================================================================================================
 
 
@@ -11,9 +11,20 @@ from users
 order by created_at
 limit 5;
 
+========================
+output #1
+========================
+
+id       username
+95       Nicole71
+80       Darby_Herzog
+67       Emilio_Bernier52
+63       Elenor88
+38       Jordyn.Jacobson2
+
 
 =============================================================================================================
-Solution #2
+Query #2
 =============================================================================================================
 
 
@@ -24,9 +35,22 @@ from users
 group by weekday
 order by users_registered desc;
 
+========================
+output #2
+========================
+
+Weekday		users_registered
+Thursday	16
+Sunday		16
+Friday		15
+Tuesday		14
+Monday		14
+Wednesday	13
+Saturday	12
+
 
 =============================================================================================================
-Solution #3
+Query #3
 =============================================================================================================
 
 
@@ -37,9 +61,41 @@ left join photos
 on users.id = photos.user_id
 where photos.id is null;
 
+========================
+output #3
+========================
+
+Username
+Aniya_Hackett
+Bartholome.Bernhard
+Bethany20
+Darby_Herzog
+David.Osinski47
+Duane60
+Esmeralda.Mraz57
+Esther.Zulauf61
+Franco_Keebler64
+Hulda.Macejkovic
+Jaclyn81
+Janelle.Nikolaus81
+Jessyca_West
+Julien_Schmidt
+Kasandra_Homenick
+Leslie67
+Linnea59
+Maxwell.Halvorson
+Mckenna17
+Mike.Auer39
+Morgan.Kassulke
+Nia_Haag
+Ollie_Ledner37
+Pearl7
+Rocio33
+Tierra.Trantow
+
 
 =============================================================================================================
-Solution #4
+Query #4
 =============================================================================================================
 
 
@@ -55,7 +111,7 @@ order by photos_posted desc;
 
 
 =============================================================================================================
-Solution #5
+Query #5
 =============================================================================================================
 
 
@@ -71,14 +127,26 @@ group by photos.id, image_url
 order by likes desc
 limit 1;
 
+========================
+output #5
+========================
+
+id		image_url				likes	username
+145		https://jarret.name		48		Zack_Kemmer93
 
 =============================================================================================================
-Solution #6
+Query #6
 =============================================================================================================
 
 
 select 
 	(select count(*) from photos)/(select count(*) from users);
+
+========================
+output #6
+========================
+
+2.5700
 
 ===============================================================
 This problem can be solved using cross table expression (CTE)
@@ -108,7 +176,7 @@ select * from average_post;
 
 
 =============================================================================================================
-Solution #7 A brand want to know which hashtag to use ina post to get more impressions. what are the top 5 most commonly used hashtags?
+Query #7 
 =============================================================================================================
 
 
@@ -121,9 +189,20 @@ group by tag_name
 order by totalpost desc
 limit 5;
 
+========================
+output #7
+========================
+
+tag_name	totalpost
+smile		59
+beach		42
+party		39
+fun			38
+concert		24
+
 
 =============================================================================================================
-Solution #8
+Query #8
 =============================================================================================================
 
 
@@ -149,9 +228,21 @@ with most_liked_photo as
 	)
     select * from used_tags;
 
+========================
+output #8
+========================
+
+tag_name
+
+fun
+party
+concert
+drunk
+smile
+
 
 =============================================================================================================
-Solution #9
+Query #9
 =============================================================================================================
 
 
@@ -163,6 +254,27 @@ inner join likes on users.id = likes.user_id
 group by username
 having totallikes = (select count(*)from photos)
 order by totallikes desc;
+
+========================
+output #9
+========================
+
+username			tatallikes
+
+Aniya_Hackett		257
+Bethany20			257
+Duane60				257
+Jaclyn81			257
+Janelle.Nikolaus81	257
+Julien_Schmidt		257
+Leslie67			257
+Maxwell.Halvorson	257
+Mckenna17			257
+Mike.Auer39			257
+Nia_Haag			257
+Ollie_Ledner37		257
+Rocio33				257
+
 
 
 
