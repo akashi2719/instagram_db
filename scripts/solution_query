@@ -1,1 +1,183 @@
 
+=============================================================================================================
+Solution #1
+=============================================================================================================
+
+
+select 
+	id,
+    username
+from users
+order by created_at
+limit 5;
+
+
+=============================================================================================================
+Solution #2
+=============================================================================================================
+
+
+select 
+	dayname(created_at) as 'weekday',
+    count(*) as users_registered
+from users
+group by weekday
+order by users_registered desc;
+
+
+=============================================================================================================
+Solution #3
+=============================================================================================================
+
+
+select 
+	username
+from users
+left join photos
+on users.id = photos.user_id
+where photos.id is null;
+
+
+=============================================================================================================
+Solution #4
+=============================================================================================================
+
+
+select 
+	users.id,
+    username,
+    ifnull(count(photos.id),0) as photos_posted
+from users
+left join photos
+on users.id = photos.user_id
+group by users.id, username
+order by photos_posted desc;
+
+
+=============================================================================================================
+Solution #5
+=============================================================================================================
+
+
+select 
+	photos.id,
+    image_url,
+    count(photo_id) as likes,
+    username
+from photos
+inner join likes on photos.id = likes.photo_id
+inner join users on photos.user_id = users.id
+group by photos.id, image_url
+order by likes desc
+limit 1;
+
+
+=============================================================================================================
+Solution #6
+=============================================================================================================
+
+
+select 
+	(select count(*) from photos)/(select count(*) from users);
+
+===============================================================
+This problem can be solved using cross table expression (CTE)
+===============================================================
+
+with users_photo as
+	(
+		select 
+			username,
+			count(photos.id) as photos,
+            count(username) over() as totalusers
+		from users
+		left join photos on users.id = photos.user_id
+		group by username
+		order by photos desc
+	),
+    average_post as
+    (
+		select 
+			*,
+            sum(photos) over() as total_photos,
+            avg(photos) over() as avg_photos
+		from users_photo
+	)
+   
+select * from average_post;
+
+
+=============================================================================================================
+Solution #7 A brand want to know which hashtag to use ina post to get more impressions. what are the top 5 most commonly used hashtags?
+=============================================================================================================
+
+
+select 
+	tag_name,
+    count(photo_id) as totalpost
+from tags
+left join photo_tags on tags.id = photo_tags.tag_id
+group by tag_name
+order by totalpost desc
+limit 5;
+
+
+=============================================================================================================
+Solution #8
+=============================================================================================================
+
+
+with most_liked_photo as
+	(
+		select 
+			photos.id,
+			image_url,
+			count(likes.user_id) as likes
+		from photos
+		left join likes on photos.id = likes.photo_id
+		group by photos.id, image_url
+		order by likes desc
+		limit 1
+	),
+    used_tags as
+    (
+		select 
+			tag_name
+        from tags
+        inner join photo_tags on tags.id = photo_tags.tag_id
+        where photo_tags.photo_id  = (select id from most_liked_photo)
+	)
+    select * from used_tags;
+
+
+=============================================================================================================
+Solution #9
+=============================================================================================================
+
+
+select
+	username,
+    count(photo_id) as totallikes
+from users
+inner join likes on users.id = likes.user_id
+group by username
+having totallikes = (select count(*)from photos)
+order by totallikes desc;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
